@@ -20,3 +20,4 @@ Replace FILENAME with name of the file with the name of the file of the script a
 In case you want the data of the whole network in single csv file, you can concatenate these csv files into a single file using Pandas libarary .
 
 
+Note that , the data will continuosely be added to the csv files as long as the script is monitoring, in real time... 
