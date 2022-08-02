@@ -115,7 +115,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
 
             #print ("element as dict", element._asdict())
             port_stats_dict_temporary = {}
-            port_stats_dict_temporary = element._asdict() # _asdict() method is a builtin method to convert namedtuples to dictionaaries.
+            port_stats_dict_temporary = element._asdict() # _asdict() method is a builtin method that converts namedtuples to dictionaries.
             port_stats_dict = {**port_stats_dict, **port_stats_dict_temporary} # merge the temporory dictionry with stats dict, to add datapath first
             #port_stats_dict['port_no'] = hex( port_stats_dict['port_no'] ) # if we want prot numbers in hexidecimal 
             self.write_csv(port_stats_dict, output_file_name)  
