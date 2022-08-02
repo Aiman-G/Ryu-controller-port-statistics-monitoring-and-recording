@@ -1,6 +1,6 @@
 # Ryu-controller-port-statistics-monitoring-and-recording ( Extension )
 
-This is an extension of of Ryu controller "simple_switch_13" that collect the port statistics data to csv files.
+This is an extension of of Ryu controller "simple_switch_13" that collect the port statistics data to csv files (for more, read Ryu controller generous documentation).
 
 The code will generate an $n$ csv files, where $n$ is the number of datapaths ( OVS switches ). A time stamp field has been added, this is very  important if you want to do time-series data analyis. 
 
