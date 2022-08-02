@@ -1,8 +1,8 @@
 
 
-import os # for file paths and svaing csv files
+import os # for file paths and saving csv files
 import pandas as pd
-import json 
+#import json 
 import csv
 from datetime import datetime
   
@@ -124,10 +124,10 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
     @staticmethod
     def write_csv(data_dict,output_file_name):
 
-        if os.path.isfile(output_file_name) ==  False : # if file does not exists 
+        if os.path.isfile(output_file_name) ==  False : # if file does not exist 
             
             with open(output_file_name, 'w') as outfile:
-                writer = csv.writer(outfile) # open file for wiriting ( wriing the headers (column names))
+                writer = csv.writer(outfile) # open file for wiriting ( writing the headers (column names))
                 writer.writerow(list(data_dict.keys())) # add headers
 
         # open for appending rows , if we want to wirte the updated statistcs of each switch,
