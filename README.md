@@ -15,7 +15,7 @@ and run the script above:
 
 *ryu run  --verbose --observe-links  ./my_ryu_apps/FILENAME.py*
 
-Replace FILENAME with name of the file with the name of the file of the script above 
+Replace FILENAME with name of the script above 
 
 In case you want the data of the whole network in single csv file, you can concatenate these csv files into a single file using Pandas libarary .
 
