@@ -1,12 +1,9 @@
 
-
-import os # for file paths and saving csv files
+import os # for file paths and svaing csv files
 import pandas as pd
-#import json 
+import json 
 import csv
-from datetime import datetime
-  
-
+import datetime
 
 from operator import attrgetter
 from ryu.app import simple_switch_13
@@ -76,10 +73,29 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                              stat.instructions[0].actions[0].port,
                              stat.packet_count, stat.byte_count)
 
-
         # *********** Flow Statistics Data ***************
     
 
+        """ path = './my_ryu_apps/monitor_data'
+        str_datapath_id = str( ev.msg.datapath.id ) 
+        output_file_name = os.path.join( path,'flow_stats_dpid_' + str_datapath_id + '.csv' ) # we will write a independent file for each datapath
+        # note : body in ev.msg.body is a list of namedTuples. so to get to the named tuple use the list index frst
+        
+        for element in body:
+
+            print ("element in flow stats", element )
+            flow_stats_dict = {}
+            flow_stats_dict['datapath'] = ev.msg.datapath.id
+
+            #print ("element as dict", element._asdict())
+            flow_stats_dict_temporary = {}
+            flow_stats_dict_temporary = element._asdict() # _asdict() method is a builtin method to convert namedtuples to dictionaries.
+            flow_stats_dict = {**flow_stats_dict, **flow_stats_dict_temporary} # merge the temporory dictionry with stats dict, to add datapath first
+            #port_stats_dict['port_no'] = hex( port_stats_dict['port_no'] ) # if we want prot numbers in hexidecimal 
+            self.write_csv(flow_stats_dict, output_file_name)   """
+
+           
+           # *************************************************
 
     @set_ev_cls(ofp_event.EventOFPPortStatsReply, MAIN_DISPATCHER)
     def _port_stats_reply_handler(self, ev):
@@ -100,22 +116,28 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
           
           
           
+            #port_stats_keys =['datapath' ,'port_no', 'rx_packets', 'tx_packets','rx_bytes','tx_bytes',
+          #        'rx_dropped','tx_dropped',
+          #        'rx_errors','tx_errors', 'rx_frame_err' ,'rx_over_err','rx_crc_err',
+          #        'collisions','duration_sec','duration_nsec']
+
+
         # *********** Port statistics Data ************
-        path = './my_ryu_apps/monitor_data' # change this path to your prefered path
+        path = './my_ryu_apps/monitor_data'
         str_datapath_id = str( ev.msg.datapath.id ) 
         output_file_name = os.path.join( path,'port_stats_dpid_' + str_datapath_id + '.csv' ) # we will write a independent file for each datapath
         # note : body in ev.msg.body is a list of namedTuples. so to get to the named tuple use the list index frst
         for element in body:
-            
-            time_stamp_dict= {}
+
             port_stats_dict = {}
-            time_stamp_dict['DateTime'] = datetime.now()
+            #add time stamp
+            port_stats_dict['time'] = datetime.datetime.now()
             port_stats_dict['datapath'] = ev.msg.datapath.id
-            port_stats_dict = {**time_stamp_dict , **port_stats_dict}
+            
 
             #print ("element as dict", element._asdict())
             port_stats_dict_temporary = {}
-            port_stats_dict_temporary = element._asdict() # _asdict() method is a builtin method that converts namedtuples to dictionaries.
+            port_stats_dict_temporary = element._asdict() # _asdict() method is a builtin method to convert namedtuples to dictionaaries.
             port_stats_dict = {**port_stats_dict, **port_stats_dict_temporary} # merge the temporory dictionry with stats dict, to add datapath first
             #port_stats_dict['port_no'] = hex( port_stats_dict['port_no'] ) # if we want prot numbers in hexidecimal 
             self.write_csv(port_stats_dict, output_file_name)  
@@ -124,10 +146,10 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
     @staticmethod
     def write_csv(data_dict,output_file_name):
 
-        if os.path.isfile(output_file_name) ==  False : # if file does not exist 
+        if os.path.isfile(output_file_name) ==  False : # if file does not exists 
             
             with open(output_file_name, 'w') as outfile:
-                writer = csv.writer(outfile) # open file for wiriting ( writing the headers (column names))
+                writer = csv.writer(outfile) # open file for wiriting ( wriing the headers (column names))
                 writer.writerow(list(data_dict.keys())) # add headers
 
         # open for appending rows , if we want to wirte the updated statistcs of each switch,
@@ -135,6 +157,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         with open(output_file_name, 'a') as outfile: 
             writer = csv.DictWriter(outfile, fieldnames = data_dict.keys())
             writer.writerow(data_dict)
+
+
 
 
 
